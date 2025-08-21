@@ -1,0 +1,30 @@
+Product Id: 1
+Name: Mountain Bike Pro 2X
+Stock quantity: 10
+Total sale value: 4000
+Total cost value: 12000
+====================
+Product Id: 2
+Name: Hybrid Pro Wheelset
+Stock quantity: 92
+Total sale value: 64800
+Total cost value: 2300
+====================
+Product Id: 3
+Name: Premium Hydraulic Brakes
+Stock quantity: 62
+Total sale value: 124000
+Total cost value: 3100
+====================
+Product Id: 4
+Name: 600W Xtreme Drivetrain
+Stock quantity: 5
+Total sale value: 2000000
+Total cost value: 1750
+====================
+Product Id: 5
+Name: Urban Performance E-bike
+Stock quantity: 9
+Total sale value: 1200000
+Total cost value: 14400
+====================

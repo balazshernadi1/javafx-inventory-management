@@ -1,0 +1,90 @@
+Product ID: 1
+Name: Mountain Bike Pro 2X
+Category: Mountain Bike
+Colour: green
+Cost: 1200
+Description: A mountain bike for those who dare
+Product Attributes:
+  - Head Tube Angle: 65.5 degrees (double)
+  - Fork Travel: 160 mm (integer)
+  - Frame Material: Carbon Fiber (string)
+Product Components:
+  - 29 inch Hybrid Pro Wheelset (ID: 2)
+  - Premium Hydraulic Brakes (ID: 3)
+Number of Listings: 1
+Number of Orders: 1
+In stock: 10
+====================
+Product ID: 2
+Name: Hybrid Pro Wheelset
+Category: Wheel & Tire
+Colour: black
+Cost: 25
+Description: The best hybrid wheelset
+Product Attributes:
+  - Rim Diameter: 29 inch (integer)
+  - Internal Rim Width: 30 mm (integer)
+  - Spoke Count: 32 (integer)
+  - Hub Axle Standard: 12x148 mm (string)
+  - Tubeless Ready: true (boolean)
+Product Components:
+  No components
+Number of Listings: 2
+Number of Orders: 2
+In stock: 46
+====================
+Product ID: 3
+Name: Premium Hydraulic Brakes
+Category: Brake
+Colour: black
+Cost: 50
+Description: Superior hydraulic brakes, the best on the market
+Product Attributes:
+  - Rotor Size: 180 mm (integer)
+  - Caliper Piston Count: 4 (integer)
+  - Hydraulic Fluid Type: DOT 5.1 (string)
+  - Lever Reach Adjustment: true (boolean)
+  - Hose Length: 1200 mm (integer)
+Product Components:
+  No components
+Number of Listings: 2
+Number of Orders: 2
+In stock: 31
+====================
+Product ID: 4
+Name: 600W Xtreme Drivetrain
+Category: Motor & Drivetrain
+Colour: grey
+Cost: 350
+Description: The most powerful and most efficient drivetrain on the market
+Product Attributes:
+  - Rated Power: 250 W (integer)
+  - Peak Torque: 90 N·m (integer)
+  - Motor Type: Brushless DC (string)
+  - Nominal Voltage: 36 V (integer)
+  - Motor Weight: 3.1 kg (double)
+Product Components:
+  No components
+Number of Listings: 1
+Number of Orders: 1
+In stock: 5
+====================
+Product ID: 5
+Name: Urban Performance E-bike
+Category: E-Bike
+Colour: white
+Cost: 1600
+Description: A lightweight high performance e-bike for urban use
+Product Attributes:
+  - Rated Power: 250 W (integer)
+  - Peak Torque: 90 N·m (integer)
+  - Motor Type: Brushless DC (string)
+  - Nominal Voltage: 36 V (integer)
+  - Motor Weight: 3.1 kg (double)
+Product Components:
+  - Premium Hydraulic Brakes (ID: 3)
+  - 600W drivetrain (ID: 4)
+Number of Listings: 1
+Number of Orders: 0
+In stock: 9
+====================

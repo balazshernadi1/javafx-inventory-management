@@ -1,0 +1,167 @@
+.loading-message{
+    -fx-text-alignment: center;
+    -fx-font-size: 24px;
+    -fx-font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-text-fill: #1e293b;
+    -fx-padding: 5 5 5 5;
+}
+
+.main-header{
+    -fx-text-fill: #1e293b;
+    -fx-font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-padding: 5 5 5 5;
+    -fx-font-weight: 700;
+    -fx-font-size : 24px
+}
+
+.main-subheader{
+    -fx-text-fill: #64748b;
+    -fx-font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-font-weight: 400;
+    -fx-padding: 5 5 5 5;
+    -fx-font-size : 20px
+}
+
+.form-container{
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 20, 0.3, 0, 4);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+    -fx-padding: 60 40 60 40;
+    -fx-max-width: 600;
+    -fx-min-height: 400;
+    -fx-max-height: 650;
+    -fx-min-width: 300;
+}
+
+.form-field{
+    -fx-font-size: 15px;
+    -fx-font-family: "Segoe UI", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-text-fill: #1f2937;
+    -fx-prompt-text-fill: #9ca3af;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+    -fx-padding: 10;
+}
+
+.form-field:valid-field{
+    -fx-border-color: #03c103;
+    -fx-effect: dropshadow(gaussian, rgba(45, 211, 8, 0.42), 8, 0.5, 0, 2);
+}
+
+.form-field:invalid-field{
+    -fx-border-color: #d61b1b;
+    -fx-effect: dropshadow(gaussian, rgba(237, 32, 32, 0.44), 8, 0.5, 0, 2);
+
+}
+
+.form-field:hover{
+    -fx-border-color: #d1d5db;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.04), 8, 0.5, 0, 2);
+}
+
+.form-field:focused{
+    -fx-border-color: #6366f1;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.15), 12, 0.6, 0, 3);
+}
+
+.text-field-label{
+    -fx-text-fill: #374151;
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+
+}
+
+.text-field-error{
+    -fx-padding: 5,0,0,0;
+    -fx-font-size: 14px;
+    -fx-text-fill: red;
+    -fx-font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-font-weight: 700;
+}
+
+.form-button{
+    -fx-background-color: #4f46e5;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 12, 0.5, 0, 4);
+    -fx-padding: 12 16 12 16;
+}
+
+.form-button:hover {
+    -fx-background-color: #3730a3;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 16, 0.6, 0, 6);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-cursor: hand;
+}
+
+.form-button:pressed{
+    -fx-background-color: #312e81;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 8, 0.4, 0, 2);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.form-button:disabled{
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #e5e7eb;
+    -fx-text-fill: #9ca3af;
+    -fx-cursor: default;
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+}
+
+.form-link{
+    -fx-underline: true;
+    -fx-font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-text-fill: #6366f1;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
+}
+
+.form-link:hover{
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-text-fill: #4f46e5;
+}
+
+.form-link:pressed{
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-text-fill: #3730a3;
+}
+
+.form-combo{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+    -fx-padding: 8;
+    -fx-font-size: 15px;
+    -fx-font-family: "Segoe UI", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
+    -fx-text-fill: #1f2937;
+    -fx-cursor: hand;
+}
+
+.form-combo:hover{
+    -fx-border-color: #d1d5db;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.04), 8, 0.5, 0, 2);
+}
+
+.form-combo:focused{
+    -fx-border-color: #6366f1;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.15), 12, 0.6, 0, 3);
+}
+
