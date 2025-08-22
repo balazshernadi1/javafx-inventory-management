@@ -110,27 +110,123 @@ The sole purpose of the DAOs is to communicate with the database using Hibernate
 Class diagram showcasing the DAO layer.
 <img width="940" height="792" alt="image" src="https://github.com/user-attachments/assets/1803a273-6f40-4d3c-89fa-c9c808872daf" />
 
-The core idea is to have the GenericDAO define a shared interface and an abstract implementation for common database operations. While actual DAOs (e.g. ProductDAOImpl) inherit the GenericDAO operations defined, while also implement their own specific interface.
+The core idea is to have the GenericDAO define a shared interface and an abstract implementation for common database operations. While actual DAOs (e.g. UserDAOImpl) inherit the GenericDAO operations defined, while also implement their own specific interface.
 
+**GenericDAO**
 ```java
-public interface UserDAO extends GenericDAO<User> {
+**
+ * Abstract base implementation of GenericDAO providing common CRUD operations.
+ * Uses Hibernate session methods for database persistence and retrieval.
+ * Concrete DAOs extend this class and inherit standard functionality while
+ * adding entity-specific operations as needed.
+ */
+public abstract class GenericDAOAbs<T> implements GenericDAO<T> {
 
-    /** Retrieves all permissions assigned to a user through their roles */
-    List<Permission> getAllUserPermissions(User user, Session session);
-    
-    /** Finds a user by their unique username for authentication */
-    User findUserByName(String username, Session session);
-    
-    /** Retrieves all users with pending approval status for administrative review */
-    List<User> getAllPendingUsers(Session session);
-    
-    /** Deactivates a user account by setting status to disabled */
-    void deleteUserById(int id, Session session);
-    
-    /** Approves a pending user account by updating their status */
-    void approveUserById(int id, Session session);
+    private final Class<T> clazz; // Entity class type for generic operations
+
+    protected GenericDAOAbs(Class<T> clazz) {
+        this.clazz = clazz;
+    }
+
+    /** Persists entity using Hibernate session.persist() */
+    @Override
+    public void save(T t, Session session) {
+        session.persist(t);
+    }
+
+    /** Batch save operation - currently not implemented */
+    @Override
+    public void saveAll(Collection<T> collection, Session session) {
+    }
+
+    /** Finds entity by primary key using session.find() */
+    @Override
+    public T findById(Integer id, Session session) {
+        return session.find(clazz, id);
+    }
+
+    /** Updates entity using session.merge() for detached entities */
+    @Override
+    public void update(T t, Session session) {
+        session.merge(t);
+    }
+
+    /** Retrieves all entities using HQL query based on class name */
+    @Override
+    public Collection<T> findAll(Session session) {
+        String tableName = clazz.getSimpleName();
+        return session.createQuery("from " + tableName, clazz).getResultList();
+    }
+
+    /** Removes entity using session.remove() */
+    @Override
+    public void delete(T t, Session session) {
+        session.remove(t);
+    }
+
+    /** Batch delete operation - currently not implemented */
+    @Override
+    public void deleteAll(Collection<T> collection, Session session) {
+    }
 }
 ```
+
+**UserDAO**
+```java
+/**
+ * User Data Access Object implementation providing user-specific database operations.
+ * Implements authentication queries, role-based permission retrieval, and administrative
+ * user management functions including account approval and deactivation.
+ */
+public class UserDaoImpl extends GenericDAOAbs<User> implements UserDAO {
+
+    public UserDaoImpl() {
+        super(User.class);
+    }
+
+    /** Retrieves user by username for authentication using parameterized HQL query */
+    @Override
+    public User findUserByName(String username, Session session){
+        return session.createQuery("from User where username = :username", User.class)
+                .setParameter("username", username)
+                .getSingleResult();
+    }
+
+    /** Retrieves all permissions for a user through role-permission joins */
+    @Override
+    public List<Permission> getAllUserPermissions(User user, Session session) {
+        return session.createQuery("select distinct p from UserRole ur " +
+                        "join ur.role r join r.rolePermissions rp join rp.permission p where ur.user = :user"
+                        , Permission.class)
+                .setParameter("user", user)
+                .getResultList();
+    }
+
+    /** Retrieves all users awaiting administrative approval */
+    @Override
+    public List<User> getAllPendingUsers(Session session){
+        return session.createQuery("from User u where u.accountStatus = :status", User.class).setParameter("status", "pending").list();
+    }
+
+    /** Soft delete: sets user status to disabled rather than physical deletion */
+    @Override
+    public void deleteUserById(int id, Session session) {
+        session.createMutationQuery("update User u set u.accountStatus = 'disabled' where u.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+
+    /** Activates pending user account by updating status to approved */
+    @Override
+    public void approveUserById(int id, Session session) {
+        session.createMutationQuery("update User u set u.accountStatus = 'approved' where u.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
+}
+```
+
+
 
 As seen on the diagram, there are only two concrete implementations, the ProductDAOImpl and UserDAOImpl. Unfortunately, due to time constraints, I wasn't able to fully decouple other database-specific operations from the service layer into their own respective DAOs.
 
