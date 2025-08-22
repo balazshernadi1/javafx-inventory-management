@@ -64,13 +64,13 @@ A quick search for my idea revealed to me that this is a major anti-pattern, a c
 A normalised Product table with shared attributes, alongside subtype tables (Bike, Brake) for unique attributes, linked 1-to-1 to the Product table. 
 This solution seemed to have the most integrity for a relational database. However, adding a new product would've required the creation of a new table with its own unique attributes. Furthermore, adding and removing attributes would've broken the simplest normalisation rules. Finally, over time, deeply nested relationships accumulate.
 
-**The choosen approach**
+**The chosen approach**
 
 I went with a hybrid option. I kept the Product table with common shared attributes, but defined an NVARCHAR column to store unique product-specific attributes in a JSON format.
 
 The formatting :
 
-```json
+```
 {
   attribute_list [
      name
@@ -96,7 +96,7 @@ The formatting :
 
 **A better solution for the future**
 
-
+Keep the Product table for shared attributes and create appropriate subtype tables for complex entities, e.g. Brake, Motor, Gear. Define the common attributes for each entity, but leave an NVARCHAR column for truly unique attributes.
 
 
 
