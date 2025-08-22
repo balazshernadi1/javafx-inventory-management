@@ -10,14 +10,14 @@ This project was created for an Object-Oriented Software Development module to d
 
 # Key Features
 
-•	Store and manage bikes and bike parts/accessories.
-•	See the quantity of each product in stock that is stored or available for purchase.
-•	Buy products to increase stock levels and sell products to decrease stock levels, while also logging each transaction.
-•	Search for specific products by their name, category, or ID.
-•	Generate single product reports with product details and stock level, or an all-stock report
-•	Authentication and Authorisation by utilising some sort of Role-Based Access Control architecture.
-•	Separation of duties by distinguishing different roles (e.g. employee and manager) and their respective permissions
-•	Allow users with administrative roles to change users’ account status to either approved or disabled.
+- Store and manage bikes and bike parts/accessories.
+-	See the quantity of each product in stock that is stored or available for purchase.
+-	Buy products to increase stock levels and sell products to decrease stock levels, while also logging each transaction.
+-	Search for specific products by their name, category, or ID.
+-	Generate single product reports with product details and stock level, or an all-stock report
+-	Authentication and Authorisation by utilising some sort of Role-Based Access Control architecture.
+-	Separation of duties by distinguishing different roles (e.g. employee and manager) and their respective permissions
+-	Allow users with administrative roles to change users’ account status to either approved or disabled.
 
 # Database
 
@@ -101,7 +101,41 @@ This would result in greater relational integrity and would make querying less c
 
 # Software Architecture
 
-I have chosen a layered approach, which might seem like overengineering for the size of the project, but it has taught me a lot.
+I have chosen a layered approach, which might seem like overengineering for the size of the project, but it has taught me a lot. This allowed me to create a modular application that is extensible.
+
+## Data Access Object (DAO) layer
+
+The sole purpose of the DAOs is to communicate with the database using Hibernate's Session and return JPA entities.
+
+Class diagram showcasing the DAO layer.
+<img width="940" height="792" alt="image" src="https://github.com/user-attachments/assets/1803a273-6f40-4d3c-89fa-c9c808872daf" />
+
+The core idea is to have the GenericDAO define a shared interface and an abstract implementation for common database operations. While actual DAOs (e.g. ProductDAOImpl) inherit the GenericDAO operations defined, while also implement their own specific interface.
+
+```java
+public interface UserDAO extends GenericDAO<User> {
+
+    /** Retrieves all permissions assigned to a user through their roles */
+    List<Permission> getAllUserPermissions(User user, Session session);
+    
+    /** Finds a user by their unique username for authentication */
+    User findUserByName(String username, Session session);
+    
+    /** Retrieves all users with pending approval status for administrative review */
+    List<User> getAllPendingUsers(Session session);
+    
+    /** Deactivates a user account by setting status to disabled */
+    void deleteUserById(int id, Session session);
+    
+    /** Approves a pending user account by updating their status */
+    void approveUserById(int id, Session session);
+}
+```
+
+As seen on the diagram, there are only two concrete implementations, the ProductDAOImpl and UserDAOImpl. Unfortunately, due to time constraints, I wasn't able to fully decouple other database-specific operations from the service layer into their own respective DAOs.
+
+
+
 
 
 
