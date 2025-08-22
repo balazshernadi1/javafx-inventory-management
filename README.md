@@ -21,7 +21,7 @@ This project was created for an Object-Oriented Software Development module to d
 
 # Database
 
-Data is stored in Azure SQL Server. The app relies on T-SQL features and is intended to run against Azure SQL
+Data is stored in Azure SQL Server. The app relies on T-SQL features and is intended to run against Azure SQL.
 
 ## Modelling the database
 
@@ -97,6 +97,15 @@ The formatting :
 **A better solution for the future**
 
 Keep the Product table for shared attributes and create appropriate subtype tables for complex entities, e.g. Brake, Motor, Gear. Define the common attributes for each entity, but leave an NVARCHAR column for truly unique attributes.
+This would result in greater relational integrity and would make querying less complex.
+
+# Software Architecture
+
+I have chosen a layered approach, which might seem like overengineering for the size of the project, but it has taught me a lot.
+
+
+
+
 
 
 
