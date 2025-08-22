@@ -110,7 +110,7 @@ The sole purpose of the DAOs is to communicate with the database using Hibernate
 Class diagram showcasing the DAO layer.
 <img width="940" height="792" alt="image" src="https://github.com/user-attachments/assets/1803a273-6f40-4d3c-89fa-c9c808872daf" />
 
-The core idea is to have the GenericDAO define a shared interface and an abstract implementation for common database operations. While actual DAOs (e.g. UserDAOImpl) inherit the GenericDAO operations defined, while also implement their own specific interface.
+The core idea is to have the GenericDAO define a shared interface and an abstract implementation for common database operations. While concrete DAOs (e.g. UserDAOImpl) inherit the GenericDAO operations defined and also implement their own entity-specific operations
 
 **GenericDAO**
 ```java
@@ -226,10 +226,75 @@ public class UserDaoImpl extends GenericDAOAbs<User> implements UserDAO {
 }
 ```
 
+As seen on the diagram before, there are only two concrete implementations, the ProductDAOImpl and UserDAOImpl. 
+Unfortunately, due to time constraints, I wasn't able to fully decouple other database-specific operations from the service layer into their own respective DAOs.
 
+## Service layer
 
-As seen on the diagram, there are only two concrete implementations, the ProductDAOImpl and UserDAOImpl. Unfortunately, due to time constraints, I wasn't able to fully decouple other database-specific operations from the service layer into their own respective DAOs.
+The service layer coordinates business rules, transactions, and persistence. Each service has a single responsibility (e.g., AuthService for authentication, ProductService for product workflows) and operates inside a transactional boundary. DAOs (e.g., ProductDAO, UserDAO) are injected into services; for complex projections, services may use HQL directly against the JPA entities.
 
+Class diagram showcasing the service layer:
+<img width="940" height="860" alt="image" src="https://github.com/user-attachments/assets/293087df-cc43-4a38-9214-68cb6b277abb" />
+
+**Key responsibilities**
+- Enforce business rules (stock limits, listing states, permissions checks upstream).
+- Orchestrate multiple DAOs in a single unit of work.
+- Translate persistence exceptions into domain exceptions.
+- Provide read models for the UI (e.g., mapping Object[] → ProductEntry).
+
+### Example 1: selling a product (creates listing + reduces stock)
+Below is a trimmed version of ProductService.sellProduct(...), which validates stock levels, creates a sales listing, and updates inventory in one transaction. It also returns domain-specific exceptions with clear messages that can be displayed to the user.
+
+```java
+/** Processes product sale with stock validation and listing creation */
+    public void sellProduct(int id, String saleMakerUser, int quantityRequested, int price) {
+        Transaction transaction = null;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Product productToSell = productDAO.findById(id, session);
+
+            User user = userDAO.findUserByName(saleMakerUser, session);
+
+            // Retrieve product stock information
+            Stock stock = productToSell.getStocks()
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(()->new ProductProcessingException("No stock found for product id: " + id));
+
+            // Validate sufficient stock for sale
+            if (stock.getQuantity() <= quantityRequested) {
+                throw new ProductProcessingException("Insufficient stock quantity for product id: " + id
+                        + "Available quantity: " + stock.getQuantity() + ", Requested: " + quantityRequested);
+            }
+
+            // Create sales listing with pricing information
+            Listing listing = new Listing();
+            listing.setProduct(productToSell);
+            listing.setQuantity(quantityRequested);
+            listing.setUnitPrice(price);
+            listing.setTotalPrice(price * quantityRequested);
+            listing.setListingStatus("active");
+            listing.setListedBy(user);
+
+            // Update stock quantity (decrease for sale)
+            stock.setQuantity(stock.getQuantity() - quantityRequested);
+
+            session.merge(stock);
+            session.persist(listing);
+            session.flush();
+
+            transaction.commit();
+
+        }catch (NoResultException e) {
+            throw new ProductProcessingException("Unexpected error has occurred");
+        }
+    }
+```
+
+## User-Interface and User Interaction Handling
+
+I utilised the Model-View-Controller-Interactor framework, devised by [Dave Barrett](https://www.pragmaticcoding.ca/javafx/Mvci-Introduction).
 
 
 
