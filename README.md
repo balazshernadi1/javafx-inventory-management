@@ -12,9 +12,9 @@ WheelWorks Management is a desktop application designed for internal use by empl
 
 Data is stored in a relational database, more specifically in an Azure SQL Server. The application will not be able to retrieve and store data reliably without it being deployed on an Azure SQL Server. This is due to the use of T-SQL.
 
-## Design
+### Design
 
-Below is a simple table which lists all the entities within the database including a short description of the given entity.
+Below is a simple table that lists all entities within the database, along with a brief description of each entity.
 
 | Entity            | Description                                                                      |
 | ----------------- | -------------------------------------------------------------------------------- |
@@ -33,9 +33,26 @@ Below is a simple table which lists all the entities within the database includi
 | `Product_Image`   | Associates one or more images with a specific product.                           |
 | `Image`           | Stores the file path or reference for each image.                                |
 
-ERD diagram 
+Followed by the entity relationship diagram below.
 
 <img width="1006" height="788" alt="image" src="https://github.com/user-attachments/assets/dc245931-7879-46c5-a60d-be83abba3e81" />
+
+**A significant design choice**
+
+A requirement was that there had to be at least two types of product stored in the database. 
+Naturally, different products will have unique attributes, which left me with two options to implement them in the database.
+
+1. Follow the Entity-Attribute-Value design
+
+Initially, I thought this was a great idea as it gives full flexibility. However, once I started thinking about scalability and query performance, I realised it is not the ideal solution. 
+I quickly found tons of articles about how this is a major anti-pattern and enterprise database destroyer.
+
+2. One Table Per Product
+
+Have a Product table with common attributes to all other products. Then, for each new product with unique attributes, create a new table referencing the Product table and declaring its unique attributes.
+This solution is the most appropriate, given that I was working with a relational database. However it is not flexible, adding a new product requires creating a new table, removing an attribute and adding new attributes creates normalisation problems, and finally it can lead to nested table mess with cycles. 
+
+
 
 
 
