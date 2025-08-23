@@ -105,7 +105,8 @@ I have chosen a layered approach, which might seem like overengineering for the 
 
 ## Data Access Object (DAO) layer
 
-The sole purpose of the DAOs is to communicate with the database using Hibernate's Session and return JPA entities.
+The purpose of the DAO layer is to decouple the application/business layer from the persistence layer. DAOs would only be responsible for persistence-related operations, in this case using Hibernate's Sessions and JPA-defined entities.
+This allows the persistence layer to evolve and change over time (e.g. new data sources added) without affecting the business/application layer logic.
 
 Class diagram showcasing the DAO layer.
 <img width="940" height="792" alt="image" src="https://github.com/user-attachments/assets/1803a273-6f40-4d3c-89fa-c9c808872daf" />
@@ -231,7 +232,7 @@ Unfortunately, due to time constraints, I wasn't able to fully decouple other da
 
 ## Service layer
 
-The service layer coordinates business rules, transactions, and persistence. Each service has a single responsibility (e.g., AuthService for authentication, ProductService for product workflows) and operates inside a transactional boundary. DAOs (e.g., ProductDAO, UserDAO) are injected into services; for complex projections, services may use HQL directly against the JPA entities.
+The service layer sits between the UI and external systems, mediating all application workflows (UI ↔ Service ↔ External). Each service has a single, well-defined responsibility—for example, an AuthService for authentication or a ProductService for product operations. Services coordinate any required DAOs and manage transactions, while shielding the UI from persistence concerns. They never expose persistence models (e.g., JPA entities) to the UI; instead, they return purpose-built Data Transfer Objects (DTOs) that aggregate only the data the UI needs.
 
 Class diagram showcasing the service layer:
 <img width="940" height="860" alt="image" src="https://github.com/user-attachments/assets/293087df-cc43-4a38-9214-68cb6b277abb" />
@@ -294,7 +295,42 @@ Below is a trimmed version of ProductService.sellProduct(...), which validates s
 
 ## User-Interface and User Interaction Handling
 
-I utilised the Model-View-Controller-Interactor framework, devised by [Dave Barrett](https://www.pragmaticcoding.ca/javafx/Mvci-Introduction).
+I utilised the Model-View-Controller-Interactor (MVCI) framework, devised by [Dave Barrett](https://www.pragmaticcoding.ca/javafx/Mvci-Introduction).
+
+In each MVCI, the following are true:
+-	The Model layer represents the application state at a given point, it doesn’t contain any logic, just JavaFX properties that are bindable. It is completely unaware of any other components.
+-	The View layer is responsible for creating the User-Interface (UI) and handling user interactions, it holds a reference to the Model and may bind properties of the Model to UI specific components. It is unaware of any sort of business logic.
+-	The Interactor, as mentioned above, encapsulates all business logic and business service communication, it holds a reference to the Model to manipulate its properties. It is unaware of how the data may be represented.
+-	The Controller is the main orchestrator. It instantiates all other components and is responsible for coordinating processes between the components. In a Multi-MVCI application, it may also hold a reference to other MVCI controllers.
+
+This project is a Multi-MVCI application, meaning that a MVCI (DashBoard MVCI) is encapsulated within another MVCI (MainMVCI). 
+
+See the class diagram below for a visualisation of such encapsulation. The diagram clearly shows that the ProductMVCI and UserMVCI are their own complete applications, which are then encapsulated within the DashboardMVCI.
+<img width="940" height="577" alt="image" src="https://github.com/user-attachments/assets/6a257e04-7e02-4a57-821a-22a82c35f525" />
+
+# Reflection
+
+This project was fun. It pushed me to research, experiment, and learn. The codebase isn’t amazing, but the progress is. Evaluating trade-offs, studying real projects, and testing ideas drove real growth and set me up to build better things next time.
+
+# Screenshots
+
+**Product Page**
+<img width="1516" height="786" alt="image" src="https://github.com/user-attachments/assets/332f9562-e348-48fa-ae9c-0dac0a5c707c" />
+
+**User Page**
+<img width="1515" height="787" alt="image" src="https://github.com/user-attachments/assets/b4a6d7b4-7d11-479d-9506-b3d64665625a" />
+
+**Register Page**
+<img width="1513" height="784" alt="image" src="https://github.com/user-attachments/assets/ecd999e6-cdff-4382-a993-40ef3e295151" />
+
+
+
+
+
+
+
+
+
 
 
 
